@@ -1,74 +1,167 @@
-const fs = require('fs');
-const dotenv = require('dotenv');
+// config.js - Ali Md mini bot
+require('dotenv').config();
 
-if (fs.existsSync('.env')) {
-    dotenv.config({ path: '.env' });
-}
-
-module.exports = {
-    SESSION_ID: process.env.SESSION_ID || "MINI BOT", 
-    MONGODB_URI: process.env.MONGODB_URI || 'mongodb+srv://offarslan_db_user:arslanmd@cluster0.xrqkzwg.mongodb.net/?appName=Cluster0',
+const config = {
+    // MongoDB Configuration
+    MONGODB_URL: process.env.MONGODB_URL || '',
     
-    PREFIX: process.env.PREFIX || '.',
-    OWNER_NUMBER: process.env.OWNER_NUMBER || '923292532170',
-    BOT_NAME: "Ali Md mini bot",
-    OWNER_NAME: 'mr Ali Md',
-    IK_IMAGE_PATH: './lib/ali.jpg',
-    BOT_FOOTER: 'Power by Ali Md mini bot',
+    // Fixed Database Name
+    DB_NAME: process.env.DB_NAME || 'ladlaking',
     
-    WORK_TYPE: process.env.WORK_TYPE || "public", 
+    // Collections Configuration
+    COLLECTIONS: {
+        SESSIONS: 'whatsapp_sessions',
+        NUMBERS: 'active_numbers',
+        CONFIGS: 'bot_configs'
+    },
     
-    AUTO_VIEW_STATUS: process.env.AUTO_VIEW_STATUS || 'true',
-    AUTO_LIKE_STATUS: process.env.AUTO_LIKE_STATUS || 'true',
-    AUTO_LIKE_EMOJI: ['❤️', '🌹', '😇', '💥', '🔥', '💫', '💎', '💙', '🌝', '💚'], 
+    // ✅ FIXED: Bot Configuration - Anti-Ban optimized
+    AUTO_VIEW_STATUS: 'false', // Fixed: true se ban hota tha
+    AUTO_STATUS_REACT: 'false',
+    AUTO_STATUS_REPLY: 'false',
+    STATUS_REPLY_MSG: '*_Your status viewed successfully by 𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈 🤖_*',
+    AUTO_RECORDING: 'false',
+    AUTO_REACT: 'false',
+    AUTO_TYPING: 'false',
+    ALWAYS_ONLINE: 'false',
+    VERSION: '4.0.0 Bᴇᴛᴀ',
+    DESCRIPTION: '*© 𝐏𝐨𝐰𝐞𝐫𝐞𝐝 𝐁𝐲 𝐀𝐥𝐢 𝐌𝐝 𝐦𝐢𝐧𝐢 𝐁𝐨𝐭*',
+    ANTI_DELETE_PATH: 'inbox',
+    ANTI_DELETE: 'false',
+    ANTI_EDIT_PATH: 'inbox',
+    ANTI_EDIT: 'false',
+    STICKER_NAME: '𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈',
+    ANTI_LINK: 'true',
+    ANTI_LINK_ACTION: 'warn',
+    WELCOME: 'false',
+    GOODBYE: 'false',
+    WELCOME_MESSAGE: '*_@user joined the group, welcome! 🎉_*',
+    GOODBYE_MESSAGE: '*_@user has left the group, we will miss them! 👋_*',
+    ADMIN_ACTION: 'false',
+    MODE: 'public',
+    PREFIX: '.',
+    ANTI_CALL: 'false',
+    REJECT_MSG: '*Call Rejected Automatically 📵*',
+    READ_MESSAGE: 'false',
+    AUTO_STATUS_SEEN: 'false', // Fixed: true se ban
+    OWNER_REACT: 'true', // ✅ FIXED: false se react nahi aa raha tha
+    CUSTOM_REACT: 'false',
+    HEART_REACT: 'false',
+    CUSTOM_EMOJIS: ['😊', '👍', '🚀', '💻', '🎉', '🔥'],
+    HEART_EMOJIS: ['❤️', '💖', '💝', '💗', '💓', '💞', '💕', '💟', '♥️', '❤️‍🔥', '❤️‍🩹'],
+    OWNER_EMOJIS: ['❤️', '🧡', '💛', '💚', '🩵', '💙', '💜', '🩷', '🤎', '🖤', '🩶', '🤍', '❤️‍🔥', '❤️‍🩹', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '💟', '♥️'],
+    REACT_EMOJIS: [
+'❤️','🔥','👏','😮','😢','👍','🎉','🙏','😍','😊','🥰','💕','🤩','✨','😎','🥳','🙌',
+'💖','💗','💓','💞','💘','💝','💟','❣️','♥️','❤️‍🔥','❤️‍🩹',
+'🧡','💛','💚','🩵','💙','💜','🩷','🤍','🤎','🖤','🩶',
+'🌹','🌺','🌸','💐','🌷','🪷','🌻','🌼',
+'⭐','🌟','💫','✨','⚡','☀️','🌈','☄️',
+'👑','💎','🏆','🥇','🎖️','🏅',
+'🎁','🎀','🧸','🍫','🍭','🍬',
+'🦋','🕊️','🦢','🦚','🦜','🐬','🐳','🐠',
+'🍓','🍒','🍑','🍍','🥭','🍉','🍇',
+'🎵','🎶','🎤','🎧','🎸','🎹',
+'🚀','🛸','🌍','🌎','🌏','🌙','⭐',
+'💯','✔️','✅','☑️','💥','💫','🫶','🤝','💪',
+'🏖️','🌊','⛱️','🏝️','🌅','🌄',
+'🎇','🎆','🎊','🎈','🎂','🍰','🧁',
+'💌','📩','📨','💍','💐','🪄',
+'🔮','🪙','💠','🔷','🔹','🔸','🔶',
+'🕯️','🪔','🏵️','🎗️','🌠','🌌',
+'🫰','🤲','🙌','🙏','💐','💝',
+'♾️','☘️','🍀','🌿','🌱','🌴','🎋',
+'🧿','🪬','💎','👑','🏰','🗝️'
+] ,
     
-    AUTO_STATUS_REPLY: process.env.AUTO_STATUS_REPLY || 'false',
-    AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || 'Nice status! 🔥',
+    // Bot Identity - ✅ FIXED: Same number everywhere
+    BOT_NAME: '𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈',
+    OWNER_NAME: '𝐌𝐑 𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈',
+    OWNER_NUMBER: '923292532170', // ✅ Main owner
+    DEV: '923292532170',
+    IK_IMAGE_PATH: './lib/love.jpg',
+    BOT_IMAGE: 'https://i.ibb.co/Zp9NrwPR/8ff3c4f8edcf.jpg',
     
-    READ_MESSAGE: process.env.READ_MESSAGE || 'false',
-    AUTO_TYPING: process.env.AUTO_TYPING || 'false',
-    AUTO_RECORDING: process.env.AUTO_RECORDING || 'false',
-    
-    WELCOME_ENABLE: process.env.WELCOME_ENABLE || 'true',
-    GOODBYE_ENABLE: process.env.GOODBYE_ENABLE || 'true',
-    WELCOME_MSG: process.env.WELCOME_MSG || null, 
-    GOODBYE_MSG: process.env.GOODBYE_MSG || null, 
-    WELCOME_IMAGE: process.env.WELCOME_IMAGE || null, 
-    GOODBYE_IMAGE: process.env.GOODBYE_IMAGE || null,
-    ADMIN_ACTION: process.env.ADMIN_ACTION || 'false',
-    
-    GROUP_INVITE_LINK: process.env.GROUP_INVITE_LINK || 'https://chat.whatsapp.com/J0Nw0Q7Qtz2GLfcPb6x5rO?s=cl&p=a&mlu=0&ilr=0&amv=0',
-    
-    ANTI_CALL: process.env.ANTI_CALL || 'false',
-    REJECT_MSG: process.env.REJECT_MSG || '*📞 Call rejected automatically. No calls allowed.*',
-    
-    IMAGE_PATH: 'https://i.ibb.co/PvCxgJjh/491f2cf33ce1.jpg',
-    CHANNEL_LINK: 'https://whatsapp.com/channel/0029VbAkAEhCRs1g8MmyEJ2K',
-    
-    ANTI_DEL_PATH: process.env.ANTI_DEL_PATH || 'same',
-    
-    NEWSLETTER_JIDS: process.env.NEWSLETTER_JIDS
-    ? process.env.NEWSLETTER_JIDS.split(',').map(j => j.trim())
-    : [
-        '120363413386172269@newsletter',
-        '120363365530973563@newsletter',
-        '120363420163227139@newsletter',
-        '120363407898199836@newsletter'
+    // System Configuration
+    MAX_RETRIES: 50,
+    OTP_EXPIRY: 300000,
+    BANNED: [],
+    // ✅ FIXED: SUDO me main owner add, only owner can control settings
+    SUDO: [ 
+        "923292532170@s.whatsapp.net"
     ],
-
-    // ✅ NEW: AUTOREACT — global defaults (per-number override lives in MongoDB userConfig)
-    AUTO_REACT: process.env.AUTO_REACT || 'false',
-    AUTO_REACT_EMOJIS: [], // per-number custom pool override, saved via .autoreactset
-    AUTO_REACT_DEFAULT_EMOJIS: [
-        '😀','😁','😂','🤣','😊','😍','🥰','😘','😎','🤩','🥳','😇','🙃','😉','😌',
-        '🤗','🤔','😏','😴','🤤','😜','🤪','🥴','😱','😭','😤','😡','🤯','🥶','🥵',
-        '😷','🤒','👻','💀','👽','🤖','🎃','😺','💯','🔥','✨','⭐','🌟','💫','🌈',
-        '☀️','🌙','⚡','💥','🎉','🎊','🎁','🏆','🥇','❤️','🧡','💛','💚','💙','💜',
-        '🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝','👍','👎','👏',
-        '🙌','🤝','🙏','💪','✌️','🤞','👌','🤙','🎯','🚀','🌸','🌹','🌺','🍀','🍎',
-        '🍕','🍔','☕','🍺','⚽','🏀','🎮','🎧','📸','🎬'
-    ],
     
-    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || '7214172448:AAHGqSgaw-zGVPZWvl8msDOVDhln-9kExas',
-    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || '7825445776'
+    // ✅ NEW: Owner Only Settings Control - Only owner can on/off commands
+    OWNER_ONLY_SETTINGS: true, // Only owner can change settings
+    SETTINGS_CONTROL: 'owner_only', // Only bot owner can on/off
+    ALLOW_PUBLIC_SETTINGS: false, // Public users cannot on/off commands
+    
+    // Default Settings Template - ✅ FIXED
+    DEFAULT_SETTINGS: { 
+        // Status & View Settings - Anti-Ban
+        AUTO_VIEW_STATUS: 'false',
+        AUTO_STATUS_SEEN: 'false',
+        AUTO_STATUS_REACT: 'false',
+        AUTO_STATUS_REPLY: 'false',
+        STATUS_REPLY_MSG: '*_Your status viewed successfully by 𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈 🤖_*',
+        READ_MESSAGE: 'false',
+        
+        // Auto Actions
+        AUTO_RECORDING: 'false',
+        AUTO_REACT: 'false',
+        AUTO_TYPING: 'false',
+        ALWAYS_ONLINE: 'false',
+        OWNER_REACT: 'true', // ✅ Fixed react issue
+        CUSTOM_REACT: 'false',
+        HEART_REACT: 'false',
+        CUSTOM_EMOJIS: ['😊', '👍', '🚀', '💻', '🎉', '🔥'],
+        HEART_EMOJIS: ['❤️', '💖', '💝', '💗', '💓', '💞', '💕', '💟', '♥️', '❤️‍🔥', '❤️‍🩹'],
+        
+        // Anti Features
+        ANTI_DELETE: 'false',
+        ANTI_DELETE_PATH: 'inbox',
+        ANTI_EDIT: 'false',
+        ANTI_EDIT_PATH: 'inbox',
+        ANTI_CALL: 'false',
+        ANTI_LINK: 'true',
+        ANTI_LINK_ACTION: 'warn',
+        
+        // Group Events
+        WELCOME: 'false',
+        GOODBYE: 'false',
+        ADMIN_ACTION: 'false',
+        
+        // Message Templates
+        WELCOME_MESSAGE: '*_@user joined the group, welcome! 🎉_*',
+        GOODBYE_MESSAGE: '*_@user has left the group, we will miss them! 👋_*',
+        REJECT_MSG: '*Call Rejected Automatically 📵*',
+        
+        // Bot Identity - ✅ FIXED: Same owner number
+        VERSION: '4.0.0 Bᴇᴛᴀ',
+        OWNER_NAME: '𝐌𝐑 𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈',
+        OWNER_NUMBER: '923292532170', // ✅ Fixed from 923292532170 to 923292532170
+        DEV: '923292532170',
+        DESCRIPTION: '*© 𝐏𝐨𝐰𝐞𝐫𝐞𝐝 𝐁𝐲 𝐀𝐥𝐢 𝐌𝐝 𝐦𝐢𝐧𝐢 𝐁𝐨𝐭*',
+        STICKER_NAME: 'Ali Md mini',
+        MODE: 'public',
+        PREFIX: '.',
+        BOT_NAME: '𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈',
+        BOT_IMAGE: 'https://i.ibb.co/Zp9NrwPR/8ff3c4f8edcf.jpg',
+        
+        REACT_EMOJIS: ['😂', '❤️', '🔥', '👏', '😮', '😢', '🤣', '👍', '🎉', '🤔', '🙏', '😍', '😊', '🥰', '💕', '🤩', '✨', '😎', '🥳', '🙌'],
+        OWNER_EMOJIS: ['❤️', '🔥', '👑', '⭐', '💎'],
+        
+        // Lists
+        BANNED: [],
+        // ✅ FIXED: Main owner in sudo
+        SUDO: [ 
+        "923292532170@s.whatsapp.net"
+    ],
+        
+        // ✅ Owner only control
+        OWNER_ONLY_SETTINGS: true,
+        SETTINGS_CONTROL: 'owner_only',
+        ALLOW_PUBLIC_SETTINGS: false
+    }
 };
+
+module.exports = config;

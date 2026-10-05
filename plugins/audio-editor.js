@@ -1,3 +1,5 @@
+// Ali Md mini ALWAYS ON TOP 💜
+
 const { cmd } = require('../command');
 const audioEditor = require('../lib/audioeditor');
 
@@ -581,14 +583,3 @@ cmd({
         await client.sendMessage(from, { react: { text: '❌', key: message.key } });
     }
 });
-
-
-/*------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-CREAT BY Ali XD MINI °• 
-AGER APKY PAS YE FILE AYA HAI TOH ENJOY KRO LEKAN CREATED DEDO 
-MEHNNAT SY BNAYA HAI - ||
-
-
-------------------------------------------------------------------------------------------------------------------------------------------------------*/

@@ -1,3 +1,4 @@
+
 const config = require('../config')
 const { cmd, commands } = require('../command')
 const { getBuffer, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson } = require('../lib/functions')
@@ -47,7 +48,7 @@ async (conn, mek, m, { from, participants, reply, isGroup, isAdmins, isCreator, 
             teks += `${randomEmoji} @${mem.id.split('@')[0]}\n`;
         }
 
-        teks += "└──✪ Ali ┃ 𝐱𝐃 ✪──";
+        teks += "└──✪ LOVE ┃ MD ✪──";
 
         conn.sendMessage(from, { text: teks, mentions: participants.map(a => a.id) }, { quoted: mek });
 

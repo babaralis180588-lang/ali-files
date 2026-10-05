@@ -1,22 +1,14 @@
 {
-  "name": "ALI-TECH",
-  "description": "Javascript WhatsApp bot made by GHOST TECH",
-  "logo": "https://i.ibb.co/PvCxgJjh/491f2cf33ce1.jpg",
-  "keywords": ["ALI-TECH"],
-  "success_url": "/",
-  "stack": "container",
-  
+  "name": "Ali Md mini",
+  "description": "WhatsApp automation bot with Admin Panel",
+  "repository": "https://github.com/yourusername/Ali_Md_Mini_Bot",
+  "keywords": ["whatsapp", "bot", "baileys", "node"],
   "env": {
-    "MONGODB_URL": {
-      "description": "MongoDB connection string for database storage",
-      "required": false
-    }
+    "OWNER_NUMBER": { "description": "Your WhatsApp number with country code, no +", "value": "923292532170" },
+    "ADMIN_PANEL_PASSWORD": { "description": "Password for the /admin dashboard", "value": "Ali Md mini 923292532170" },
+    "OPENAI_API_KEY": { "description": "Optional — for .ai command", "required": false },
+    "GIPHY_API_KEY": { "description": "Optional", "required": false }
   },
-
-  "buildpacks": [
-    {
-      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
-    }
-  ],
-  "stack": "heroku-24"
+  "formation": { "web": { "quantity": 1, "size": "eco" } },
+  "buildpacks": [{ "url": "heroku/nodejs" }]
 }

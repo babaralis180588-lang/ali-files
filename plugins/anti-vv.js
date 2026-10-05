@@ -13,23 +13,28 @@ cmd({
   isCreator,
   reply,
   sender,
-  userConfig
+  userConfig  // Added userConfig parameter
 }) => {
   try {
     // Only allow the bot owner/creator
     if (!isCreator) {
-      return;
+      return; // Simply return without any response if not owner
     }
 
     const messageText = body.trim().toLowerCase();
+    
+    // Check if the message contains EXACTLY one of the keywords ONLY
+    // No other words, just the keyword alone
     const hasExactKeywordOnly = positiveKeywords.includes(messageText);
-
+    
+    // Only process if contains exact keyword ONLY AND replying to a view once message
     if (hasExactKeywordOnly && message.quoted?.viewOnce) {
       const buffer = await message.quoted.download();
       const mtype = message.quoted.mtype;
       const originalCaption = message.quoted.text || '';
       const options = { quoted: message };
 
+      // Get DESCRIPTION from userConfig if available, otherwise use config.DESCRIPTION
       const DESCRIPTION = userConfig?.DESCRIPTION || config.DESCRIPTION || "";
 
       let messageContent = {};
@@ -56,9 +61,10 @@ cmd({
           };
           break;
         default:
-          return;
+          return; // Silently ignore unsupported types
       }
 
+      // Send the view once content to the user's DM
       await client.sendMessage(message.sender, messageContent, options);
     }
   } catch (error) {
@@ -67,42 +73,42 @@ cmd({
 });
 
 // Command handler for manual retrieval of view once messages (owner only)
-// ✅ FIX: signature ab (client, message, m, ctx) hai — bot.js jo actually bhejta hai usse match karta hai
 cmd({
   pattern: "vv3",
   react: '🐳',
   desc: "Retrieve view once messages (Owner Only)",
   category: "owner",
   filename: __filename
-}, async (client, message, m, {
+}, async (client, message, match, store, {
   from,
   isCreator,
-  userConfig
+  userConfig  // Added userConfig parameter
 }) => {
   try {
     // Only allow the bot owner/creator
     if (!isCreator) {
-      return;
+      return; // Simply return without any response if not owner
     }
 
-    // ✅ FIX: match.quoted ki jagah m.quoted use kro (m already sms() se parsed hai, quoted data isme maujood hai)
-    if (!m.quoted) {
+    if (!match.quoted) {
       return await client.sendMessage(from, {
         text: "*🍁 Please reply to a view once message!*"
       }, { quoted: message });
     }
 
-    if (!m.quoted.viewOnce) {
+    // Check if it's a view once message
+    if (!match.quoted.viewOnce) {
       return await client.sendMessage(from, {
         text: "*❌ Please reply to a view once message!*"
       }, { quoted: message });
     }
 
-    const buffer = await m.quoted.download();
-    const mtype = m.quoted.mtype;
-    const originalCaption = m.quoted.text || '';
+    const buffer = await match.quoted.download();
+    const mtype = match.quoted.mtype;
+    const originalCaption = match.quoted.text || '';
     const options = { quoted: message };
 
+    // Get DESCRIPTION from userConfig if available, otherwise use config.DESCRIPTION
     const DESCRIPTION = userConfig?.DESCRIPTION || config.DESCRIPTION || "";
 
     let messageContent = {};
@@ -111,21 +117,21 @@ cmd({
         messageContent = {
           image: buffer,
           caption: originalCaption ? `${originalCaption}\n\n> ${DESCRIPTION}` : (DESCRIPTION ? `> ${DESCRIPTION}` : ""),
-          mimetype: m.quoted.mimetype || "image/jpeg"
+          mimetype: match.quoted.mimetype || "image/jpeg"
         };
         break;
       case "videoMessage":
         messageContent = {
           video: buffer,
           caption: originalCaption ? `${originalCaption}\n\n> ${DESCRIPTION}` : (DESCRIPTION ? `> ${DESCRIPTION}` : ""),
-          mimetype: m.quoted.mimetype || "video/mp4"
+          mimetype: match.quoted.mimetype || "video/mp4"
         };
         break;
       case "audioMessage":
         messageContent = {
           audio: buffer,
           mimetype: "audio/mp4",
-          ptt: m.quoted.ptt || false
+          ptt: match.quoted.ptt || false
         };
         break;
       default:

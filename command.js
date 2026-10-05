@@ -1,26 +1,23 @@
+// command.js
 var commands = [];
 
 function cmd(info, func) {
     var data = info;
     data.function = func;
-    
-    // Si pas de pattern, on utilise cmdname
-    if (!data.pattern && data.cmdname) data.pattern = data.cmdname;
-    
-    if (!data.alias) data.alias = [];
     if (!data.dontAddCommandList) data.dontAddCommandList = false;
-    if (!data.desc) data.desc = '';
+    if (!info.desc) info.desc = '';
     if (!data.fromMe) data.fromMe = false;
-    if (!data.category) data.category = 'misc';
-    
+    if (!info.category) data.category = 'misc';
+    if(!info.filename) data.filename = "Not Provided";
     commands.push(data);
     return data;
 }
-
 module.exports = {
     cmd,
-    AddCommand: cmd,
-    Function: cmd,
+    AddCommand:cmd,
+    Function:cmd,
+    Module:cmd,
+    bandah:cmd,
+    command:cmd,
     commands,
 };
-

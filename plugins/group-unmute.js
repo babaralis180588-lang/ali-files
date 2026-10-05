@@ -1,27 +1,32 @@
 const config = require('../config')
-const { cmd } = require('../command')
+const { cmd, commands } = require('../command')
+const { getBuffer, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson} = require('../lib/functions')
 
 cmd({
-    pattern: "unmute",
-    alias: ["open"],
-    react: "🔊",
-    desc: "Unmute the group (Everyone can send messages).",
-    category: "group",
-    filename: __filename
-},
-async (conn, mek, m, { from, isGroup, reply }) => {
-    try {
-        if (!isGroup) return reply("❌ This command can only be used in groups.");
+  pattern: "unmute",
+  alias: ["unlock", "open"],
+  desc: "Unmute the group (admins only)",
+  category: "group",
+  react: "🔊",
+  filename: __filename
+}, async (conn, mek, m, {
+  from,
+  isCreator,
+  isBotAdmins,
+  isAdmins,
+  isGroup,
+  reply
+}) => {
+  try {
+    if (!isGroup) return await reply("⚠️ This command only works in groups.");
+    if (!isBotAdmins) return await reply("❌ I must be admin to unmute the group.");
+    if (!isAdmins && !isCreator) return await reply("🔐 Only group admins or owner can use this command.");
 
-        await conn.groupSettingUpdate(from, "not_announcement");
-        await conn.sendMessage(from, { react: { text: "🔊", key: mek.key } });
-        reply("🔊 *Group Unmuted*\nEveryone can send messages now.");
-    } catch (e) {
-        const msg = (e.message || '').toLowerCase();
-        if (msg.includes('not-authorized') || msg.includes('forbidden') || msg.includes('403')) {
-            return reply("❌ Make the bot an admin first, then try .unmute again.");
-        }
-        console.error("Unmute error:", e.message);
-        reply("❌ Failed to unmute: " + e.message);
-    }
+    await conn.groupSettingUpdate(from, 'not_announcement');
+    await reply("*🔊 Group has been unmuted!* \nEveryone can send messages now.");
+
+  } catch (err) {
+    console.error(err);
+    await reply("❌ Failed to unmute group. Something went wrong.");
+  }
 });
