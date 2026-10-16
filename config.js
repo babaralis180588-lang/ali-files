@@ -145,7 +145,7 @@ const config = {
         MODE: 'public',
         PREFIX: '.',
         BOT_NAME: '𝐀𝐋𝐈 𝐌𝐃 𝐌𝐈𝐍𝐈',
-        BOT_IMAGE: 'https://i.ibb.co/Zp9NrwPR/8ff3c4f8edcf.jpg',
+        BOT_IMAGE: 'https://i.ibb.co/gMN7ZqqY/7010565aaf6e.jpg',
         
         REACT_EMOJIS: ['😂', '❤️', '🔥', '👏', '😮', '😢', '🤣', '👍', '🎉', '🤔', '🙏', '😍', '😊', '🥰', '💕', '🤩', '✨', '😎', '🥳', '🙌'],
         OWNER_EMOJIS: ['❤️', '🔥', '👑', '⭐', '💎'],
